@@ -26,7 +26,7 @@ version: 2.1
         command: apk add --update ansible
     - run:
         name: Run Playbook and Configure server
-        command: ansible-playbook -i inventory.txt main-remote.yml
+        command: ansible-playbook -i inventory main-remote.yml
 
 workflows:
   say-hello-workflow:
