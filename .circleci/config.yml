@@ -1,6 +1,6 @@
 version: 2.1
 
-# jobs:
+jobs:
 #   create_infrastructure: 
 #     docker:
 #       - image: amazon/aws-cli
@@ -22,16 +22,16 @@ version: 2.1
       - add_ssh_keys:
           fingerprints: ["78:02:1a:ed:e2:e1:ba:62:aa:b0:88:9f:57:84:13:e8"]
       - run:
-        name: Install Ansible
-        command: apk add --update ansible
-    - run:
-        name: Run Playbook and Configure server
-        command: ansible-playbook -i inventory.txt main-remote.yml
+          name: Install Ansible
+          command: apk add --update ansible
+      - run:
+          name: Run Playbook and Configure server
+          command: ansible-playbook -i inventory.txt main-remote.yml
 
 workflows:
   say-hello-workflow:
     jobs:
       # - create_infrastructure
-      - configure_infrastructure:
+      - configure_infrastructure
           # requires:
           #   - create_infrastructure
