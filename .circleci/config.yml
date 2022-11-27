@@ -30,14 +30,17 @@ jobs:
 
   smoke_test:
     docker:
-      - image: python:3.7-alpine3.11
+      - image: alpine:latest
     steps:
       - run: apk add --update curl
       - run: 
           name: smoke test
-          command:
-            # URL="https://blog.udacity.com/"
-            if curl -s --head "https://blog.udacity.com/" then return 0
+          command: |
+            URL="https://blog.udacity.com/"
+            # Test if website exists
+            if curl -s --head ${URL} 
+            then
+              return 0
             else
               return 1
             fi
