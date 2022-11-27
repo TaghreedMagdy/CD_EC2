@@ -27,22 +27,22 @@ jobs:
   #           --stack-name stack-create-bucket-${CIRCLE_WORKFLOW_ID:0:7} \
   #           --parameter-overrides MyBucketName="mybucket-${CIRCLE_WORKFLOW_ID:0:7}"
 
-  # get_last_deployment_id:
-  #   docker:
-  #     - image: amazon/aws-cli
-  #   steps:
-  #     - checkout
-  #     - run: yum install -y tar gzip
-  #     - run:
-  #         name: Fetch and save the old pipeline ID (bucket name) responsible for the last release.
-  #         command: |
-  #           aws cloudformation \
-  #           list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
-  #           --no-paginate --output text > textfile.txt
-  #     - persist_to_workspace:
-  #         root: .
-  #         paths: 
-  #           - textfile.txt
+  get_last_deployment_id:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run: yum install -y tar gzip
+      - run:
+          name: Fetch and save the old pipeline ID (bucket name) responsible for the last release.
+          command: |
+            aws cloudformation \
+            list-exports --query "Exports[?Name==\`PipelineID\`].Value" \
+            --no-paginate --output text > textfile.txt
+      - persist_to_workspace:
+          root: .
+          paths: 
+            - textfile.txt
 
   promote_to_production:
     docker:
@@ -132,8 +132,10 @@ workflows:
   say-hello-workflow:
     jobs:
       - promote_to_production
+      - get_last_deployment_id
       - clean_up_old_front_end:
           requires:
+            - get_last_deployment_id
             - promote_to_production
       # - get_last_deployment_id
       # - create_and_deploy_frontend
