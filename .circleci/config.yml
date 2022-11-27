@@ -30,14 +30,14 @@ jobs:
 
   smoke_test:
     docker:
-      - image: alpine:latest
+      - image: python:3.7-alpine3.11
     steps:
       - run: apk add --update curl
       - run: 
           name: smoke test
           command:
             URL="https://blog.udacity.com/"
-            if curl -s --head $URL 
+            if curl -s --head ${URL} 
             then
               return 0
             else
